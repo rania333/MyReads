@@ -1,8 +1,18 @@
 const SingleBook = (props) => {
-    const {books, switchShelf} = props;
+    const {books,books2, switchShelf} = props;
     let currentBook = "none";
+    let myBooks = books2 ? books2 : books;
+    //compare books in shelf and in search page
+    if(books2) {
+        for (let i=0 ; i<books.length; i++) {
+            books2.map(book => {
+                if (books[i].id === book.id) {
+                    book.shelf = books[i].shelf
+                }
+            })
+    }}
     return (
-        books.map(d => (
+        myBooks.map(d => (
             <li key={d.id}>
             <div className="book">
                 <div className="book-top">

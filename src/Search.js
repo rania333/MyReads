@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import SingleBook from "./SingleBook";
 class Search extends Component {
     state = { 
-        books: [],
+        books2: [],
         query: ''
     }
     updateQuery(q) {
@@ -25,7 +25,7 @@ class Search extends Component {
                     allBooks.push(book)
                 }
             });
-            this.setState(() => ({books: allBooks}))
+            this.setState(() => ({books2: allBooks}))
         })
         .catch(err => {
             this.updateQuery("");
@@ -47,7 +47,7 @@ class Search extends Component {
                 <div className="search-books-results">
                     <ol className="books-grid">
                         { (this.state.query.trim() !== "") && (this.props.books.length!== 0) &&
-                        <SingleBook books={this.state.books} switchShelf={switchShelf} />
+                        <SingleBook books2={this.state.books2} switchShelf={switchShelf} books={this.props.books}/>
                         }
                     </ol>
                 </div>

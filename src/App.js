@@ -7,42 +7,40 @@ import Search from './Search';
 import * as BooksAPI from './BooksAPI'
 
 class BooksApp extends React.Component {
-state = {
-        books: [],
-    } 
-    componentDidMount() {
-        BooksAPI.getAll()
-        .then((books) => {
-            this.setState(() => ({books}))
-        })
+  state = {
+          books: [],
+      } 
+    async componentDidMount() {
+        const books = await BooksAPI.getAll();
+        this.setState({books});
     }
     switchShelf = (book, shelff) => {
+      console.log("before", this.state.books) 
         let targetBook;
-        if (!this.state.books.includes(book)) {
-          this.state.books.push(book);
-        }
-        // if (this.state.books.includes(book)) {
-        //   return;
-        // }
-        const updatedState = this.state.books.forEach(b => {
-            if (b === book) {
-                b.shelf = shelff;
-                targetBook = b;
-            }
+        const updatedState = this.state.books.map(bo => {
+          if (bo.id === book.id) {
+            bo.shelf = shelff;
+            targetBook = bo;
+          } else {
+            book.shelf = shelff;
+            targetBook = book
+          }
         })
-        this.setState({...this.state, updatedState});
+        this.setState({...this.state.books, updatedState});
         BooksAPI.update(targetBook, shelff);
+        console.log("after", this.state.books) 
+
+        
     }
     
   render() {
     return (
       <div className="app">
-          <Route path="/search" render={() => (
-            <Search switchShelf={this.switchShelf} books={this.state.books}
-            />
-          )}/>
-          <Route exact path="/" render={() => (
-            <div className="list-books">
+          <Route path="/search">
+            <Search switchShelf={this.switchShelf} books={this.state.books}/>
+          </Route>
+          <Route exact path="/">
+          <div className="list-books">
               <HeaderComponent/>
               <ListComponent switchShelf={this.switchShelf} books={this.state.books} 
               />
@@ -50,7 +48,7 @@ state = {
                   <Link to="/search" > Add a book </Link>
               </div>
             </div>
-          )}/>
+          </Route>
       </div>
     )
   }
